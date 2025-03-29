@@ -5,6 +5,7 @@ public abstract class Equipment {
     protected int health;
     protected int defense;
     protected int agility;
+    protected String name;
 
     public int getAttack() {
         return attack;

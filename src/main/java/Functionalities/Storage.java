@@ -72,9 +72,9 @@ public class Storage {
         String characterName = parameters[3];
         int maxHealth = Integer.parseInt(parameters[4]);
         if (characterType.equals("Player")) {
-            return new Player(healthBars, attackValue, defenseValue, characterName, maxHealth);
+            return new Player(healthBars, attackValue, defenseValue, characterName);
         } else if (characterType.equals("Enemy")) {
-            return new Enemy(healthBars, attackValue, defenseValue, characterName, maxHealth);
+            return new Enemy(healthBars, attackValue, defenseValue, characterName);
         } else {
             throw new RolladieException("Invalid Character Type");
         }
@@ -85,8 +85,13 @@ public class Storage {
         String eventType = parameters[0];
         switch(eventType) {
         case "Battle":
-            Enemy enemy = (Enemy) parseCharacterFromText("Enemy", Arrays.copyOfRange(parameters, 1, parameters.length + 1));
-            return new Battle(player, enemy);
+            try {
+                Enemy enemy = (Enemy) parseCharacterFromText("Enemy", Arrays.copyOfRange(parameters, 1, parameters.length + 1));
+                return new Battle(player, enemy);
+            }
+            catch (RolladieException e){
+                System.out.println(e.getMessage());
+        }
         default:
             throw new RolladieException("Invalid Event Type");
         }

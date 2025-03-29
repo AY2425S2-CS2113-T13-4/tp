@@ -16,10 +16,7 @@ public class UI {
      */
     public static String lineSeparator = "======================================================================";
 
-    public static String readInput() {
-        String inputLine = new Scanner(System.in).nextLine().toLowerCase();
-        return inputLine;
-    }
+
 
     /**
      * A string containing the ASCII art logo of the game.

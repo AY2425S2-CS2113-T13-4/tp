@@ -27,12 +27,20 @@ public class BattleLogic {
         this.enemy = enemy;
     }
 
+    public boolean getHasWon() {
+        return hasWon;
+    }
+
+    public boolean getHasBattleEnded() {
+        return hasBattleEnded;
+    }
+
     /**
      * Checks whether the battle ends after current turn.
      *
      * @param turn current player/enemy's turn.
      */
-    private void checkBattleEnd(Turn turn) {
+    public void checkBattleEnd(Turn turn) {
         if (turn.hasSurrendered) {
             hasWon = false;
             hasBattleEnded = true;
@@ -48,8 +56,8 @@ public class BattleLogic {
     }
 
     /**
-     * Handles the player and enemy turns. Calls UI to print player and enemy info after enemy turn.
-     *
+     * Handles the player and enemy turns.
+     * Calls UI to print player and enemy info after enemy turn.
      */
     private void handleTurnOrder() {
         if (playerTurn) {

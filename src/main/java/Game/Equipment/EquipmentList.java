@@ -8,9 +8,21 @@ import java.util.ArrayList;
 public class EquipmentList {
     private ArrayList<Equipment> equipmentList;
     private int maxNumberOfEquipment;
+    private int totalAttack;
+    private int totalDefense;
+    private int totalHp;
+    private int totalAgility;
 
     public EquipmentList(int maxNumberOfEquipment) {
         this.maxNumberOfEquipment = maxNumberOfEquipment;
         equipmentList = new ArrayList<>();
     }
+
+    public void addEquipment(Equipment equipment) {
+        equipmentList.add(equipment);
+    }
+    public void removeEquipment(Equipment equipment) {
+        equipmentList.remove(equipment);
+    }
+
 }

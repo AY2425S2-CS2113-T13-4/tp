@@ -8,6 +8,8 @@ import Game.Actions.BattleAction.FleeAction;
 import Game.Actions.ExitAction;
 import Game.Actions.HelpAction;
 
+import java.util.Scanner;
+
 /**
  * Parser class to handle user inputs.
  * Parser object is created to take in user inputs and handle them.
@@ -50,4 +52,9 @@ public class Parser {
             return new DefaultAction();
         }
     }
+    public static String readInput() {
+        String inputLine = new Scanner(System.in).nextLine().toLowerCase();
+        return inputLine;
+    }
+
 }

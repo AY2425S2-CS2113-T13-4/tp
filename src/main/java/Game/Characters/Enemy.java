@@ -12,12 +12,10 @@ public class Enemy extends Character {
      * @param defense an integer to represent the defense value.
      * @param name a string to represent the name of the enemy.
      */
+
     public Enemy(int[] health, int attack, int defense, String name) {
         super(health, attack, defense, name);
     }
-
-    public Enemy(int[] healthBars, int attackValue, int defenseValue, String characterName, int maxHealth) {
-        super(healthBars, attackValue, defenseValue, characterName, maxHealth);
 
     public Enemy(int health, int attack, int defense, String name) {
         super(health, attack, defense, name);

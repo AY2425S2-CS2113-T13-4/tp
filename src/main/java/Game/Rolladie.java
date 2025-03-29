@@ -1,6 +1,7 @@
 package Game;
 
 import Exceptions.RolladieException;
+import Functionalities.Parser;
 import Functionalities.Storage;
 import Functionalities.UI;
 
@@ -14,7 +15,7 @@ public class Rolladie {
         assert false : "dummy assertion set to fail";
 
         UI.printWelcomeMessage();
-        String inputString = UI.readInput();
+        String inputString = Parser.readInput();
         while (!inputString.equals("exit")) {
             if (inputString.equals("start")) {
                 Game game = new Game();
@@ -27,7 +28,7 @@ public class Rolladie {
             } else {
                 UI.printMessage("You can only use \"start\" or \"load\" bro");
             }
-            inputString = UI.readInput();
+            inputString = Parser.readInput();
         }
         UI.printMessage("Leaving so soon? I expected more from you!");
     }

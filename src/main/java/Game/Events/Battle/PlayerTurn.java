@@ -8,6 +8,8 @@ import Game.Actions.BattleAction.DefendAction;
 import Game.Actions.BattleAction.FleeAction;
 import Game.Characters.Character;
 
+import static Functionalities.Parser.getAction;
+
 /**
  * Represents the player's turn. Player can select different moves during his/her turn.
  */
@@ -37,8 +39,8 @@ public class PlayerTurn extends Turn {
      * @return A String representing the action of the player.
      */
     private Action getCurrAction() {
-        String inputString = UI.readInput();
-        return Parser.getAction(inputString);
+        String inputString = Parser.readInput();
+        return getAction(inputString);
     }
 
     /**
@@ -58,6 +60,4 @@ public class PlayerTurn extends Turn {
         }
 
     }
-
-
 }

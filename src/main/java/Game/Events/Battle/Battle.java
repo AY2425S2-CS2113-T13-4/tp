@@ -1,11 +1,10 @@
 package Game.Events.Battle;
 
-import Functionalities.Parser;
+import Exceptions.RolladieException;
 import Functionalities.UI;
 import Game.Characters.Enemy;
 import Game.Characters.Player;
 import Game.Events.Event;
-import Game.Events.EventType;
 
 import static Functionalities.Storage.SAVE_DELIMITER;
 
@@ -15,14 +14,26 @@ import static Functionalities.Storage.SAVE_DELIMITER;
 public class Battle extends Event {
     private final Enemy enemy;
     private boolean hasWon;
+
     /**
-     * Constructs a Battle event object.
-     *
+     * Constructs a valid Battle event object.
+     * Initialises hasWon to be false at start of battle.
      * @param player The player character in battle.
      * @param enemy The enemy character that player is facing.
      */
-    public Battle(Player player, Enemy enemy) {
+    public Battle(Player player, Enemy enemy) throws RolladieException {
         super(player);
+        final int FIRST_HEALTH_BAR = 0;
+        if (player.getHealthBars()[FIRST_HEALTH_BAR] <= 0) {
+            throw new RolladieException("Player health bar is empty.");
+        } else if (enemy.getHealthBars()[FIRST_HEALTH_BAR] <= 0) {
+            throw new RolladieException("Enemy health bar is empty.");
+        }
+        if (player.getAttackValue() < 0) {
+            throw new RolladieException("Player attack value is negative.");
+        } else if (enemy.getAttackValue() < 0) {
+            throw new RolladieException("Enemy attack value is negative.");
+        }
         this.enemy = enemy;
         hasWon = false;
     }
