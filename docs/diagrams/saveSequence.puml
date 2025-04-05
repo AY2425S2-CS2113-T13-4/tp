@@ -1,0 +1,75 @@
+@startuml
+hide footbox
+skinparam sequenceReferenceBackgroundColor #FFFFFF
+actor User
+
+participant ":Game" as Game
+participant "<<Class>> Storage" as Storage
+participant ":Event" as Event
+participant ":Player" as Player
+
+loop until game is over
+    User->Game : game.run()
+    activate Game
+    Game->Game:saveGame()
+    activate Game
+    Game->Storage: Storage.saveGame(...)
+    activate Storage
+    ref over Storage
+        Check for file directory and file
+    end ref
+    Storage -> Player: player.toText(): String
+    activate Player
+    Player --> Storage: Encoded player data
+    deactivate Player
+    ref over Storage
+        Write player data into file
+    end ref
+    Storage -> Event: currentEvent.toText(): String
+    activate Event
+    Event --> Storage: Encoded currentEvent data
+    deactivate Event
+    ref over Storage
+        Write currentEvent data into file
+    end ref
+
+    loop eventsQueue
+    Storage -> Event: event.toText(): String
+    activate Event
+    Event --> Storage: Encoded event data
+    deactivate Event
+    ref over Storage
+        Write event data into file
+    end ref
+    end loop
+    Storage --> Game
+    destroy Storage
+    Game --> Game
+    deactivate Game
+    Game->Event : event.run()
+    activate Event
+    Event-->Game: event finishes
+    deactivate Event
+end loop
+@enduml
+
+@startuml
+hide footbox
+skinparam sequenceReferenceBackgroundColor #FFFFFF
+
+participant "<<Class>> Storage" as Storage
+participant ":FileWriter" as FileWriter
+participant ":File" as File
+
+activate Storage
+group sd Write data into file
+    Storage -> FileWriter: fw.write(data)
+    activate FileWriter
+    FileWriter -> File
+    activate File
+    File --> FileWriter
+    deactivate File
+    FileWriter --> Storage
+    deactivate FileWriter
+end group
+@enduml

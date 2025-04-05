@@ -1,0 +1,160 @@
+@startuml
+hide footbox
+skinparam sequenceReferenceBackgroundColor #FFFFFF
+actor User
+
+participant ":Main" as Main
+participant "<<Class>> Storage" as Storage
+participant ":Character" as Character
+participant ":Event" as Event
+participant ":Game" as Game
+
+User -> Main: Load Game
+Main -> Storage:
+activate Storage
+
+ref over Storage
+    Fetch and Decode Player Data
+end ref
+
+ref over Storage, Character
+    Create Player Character from Character Data
+end ref
+
+ref over Storage
+    Fetch and Decode Current Event Data
+end ref
+
+ref over Storage, Character, Event
+    Create Current Event from Event Data
+end ref
+
+Storage -> Storage: Create empty eventsQueue
+loop until end of text file
+    ref over Storage
+        Fetch and Decode Event Data
+    end ref
+
+    ref over Storage, Character, Event
+        Create Event from Event Data
+    end ref
+    Storage -> Storage: add Event into eventsQueue
+end loop
+
+Storage -> Game: new Game(player, currentEvent, eventsQueue)
+activate Game
+Game --> Storage: :Game
+deactivate Game
+Storage --> Main:
+destroy Storage
+Main -> Game: game.run()
+activate Game
+@enduml
+
+@startuml
+hide footbox
+
+participant "<<Class>> Storage" as Storage
+participant ":Scanner" as Scanner
+participant ":File" as File
+
+group sd Fetch and Decode Data
+    activate Storage
+    Storage -> Scanner: Fetch Data
+    activate Scanner
+    Scanner -> File:
+    activate File
+    File --> Scanner:
+    deactivate File
+    Scanner --> Storage: Data :String[]
+    deactivate Scanner
+end group
+@enduml
+
+@startuml
+hide footbox
+skinparam sequenceReferenceBackgroundColor #FFFFFF
+
+participant "<<Class>> Storage" as Storage
+
+participant ":Battle" as Battle
+participant ":Loot" as Loot
+participant ":Equipment" as Equipment
+participant ":Shop" as Shop
+
+activate Storage
+group sd Create Event from Event Data
+    Storage -> Storage: Parse Event Data
+    activate Storage
+        alt eventType is Battle
+            ref over Storage
+                Create Enemy Character from Character Data
+            end ref
+            Storage -> Battle: new Battle(player, enemy)
+            activate Battle
+            Battle --> Storage: :Battle
+            deactivate Battle
+        else eventType is Loot
+            Storage -> Loot: new Loot(player)
+            activate Loot
+            Loot --> Storage: :Loot
+            deactivate Loot
+        else eventType is Shop
+            Storage -> Storage: Parse Equipment List Data
+            activate Storage
+                Storage -> Equipment: new Equipment(...)
+                activate Equipment
+                Equipment --> Storage: equipments:Equipment[]
+                deactivate Equipment
+                Storage --> Storage:
+                deactivate Storage
+            Storage -> Shop: new Shop(player, equipments)
+            activate Shop
+            Shop --> Storage: :Shop
+            deactivate Shop
+        end alt
+    Storage --> Storage:
+    deactivate Storage
+end group
+@enduml
+
+@startuml
+hide footbox
+
+participant "<<Class>> Storage" as Storage
+participant ":Player" as Player
+participant ":EquipmentList" as EquipmentList
+participant ":Enemy" as Enemy
+
+activate Storage
+group sd Create Character from Character Data
+    alt characterType is Player
+        Storage -> Storage: Parse Player Data
+        activate Storage
+            Storage -> Storage: Parse Player Equipments
+            activate Storage
+                Storage -> EquipmentList: new EquipmentList(...)
+                activate EquipmentList
+                EquipmentList --> Storage: equipments:EquipmentList
+                deactivate EquipmentList
+                Storage --> Storage:
+            deactivate Storage
+            Storage -> Player: new Player(...)
+            activate Player
+            Player --> Storage: :Player
+            deactivate Player
+            Storage --> Storage:
+        deactivate Storage
+    else characterType is Enemy
+        Storage -> Storage: Parse Enemy Data
+        activate Storage
+        Storage -> Enemy: new Enemy(...)
+        activate Enemy
+        Enemy --> Storage: enemy:Enemy
+        deactivate Enemy
+        Storage --> Storage:
+        deactivate Storage
+    end alt
+end group
+
+@enduml

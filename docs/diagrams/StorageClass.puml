@@ -1,0 +1,75 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+
+package Functionalities {
+    class Storage {
+        -{static} final FILE_DIRECTORY: String
+        -{static} final FILE_NAME: String
+        -{static} final LOAD_DELIMITER: String
+        +{static} final SAVE_DELIMITER: String
+
+        +{static}saveGame(player: Player, currentEvent: Event, eventsQueue: Queue<Event>):
+        -{static}parseCharacterFromText(characterType: String, parameters: String[]): Character
+        -{static}parseEventFromText(player: Player, parameters: String[]): Event
+        +{static}loadGame():Game
+    }
+}
+package "Game " {
+    package Events {
+        class "{abstract} \n Event" {
+            +getEventIcon(): String { abstract }
+            +toText(): String { abstract }
+        }
+        class Battle {
+            +getEventIcon(): String
+            +toText(): String
+        }
+        class Loot {
+            +getEventIcon(): String
+            +toText(): String
+        }
+        class Shop {
+            +getEventIcon(): String
+            +toText(): String
+        }
+    }
+    package Characters {
+        class Character {
+            +toText():String
+        }
+        class Enemy {
+            +toText():String
+        }
+        class Player {
+            -equipments:EquipmentList
+            +toText():String
+        }
+    }
+    package Equipment {
+        class "{abstract} \n Equipment" {
+            +toText():String
+        }
+
+        class EquipmentList {
+            +toText():String
+        }
+    }
+    class Game {
+        -saveGame(): void
+    }
+}
+
+Storage ..> "{abstract} \n Event"
+Storage ..> Character
+Character <|-- Enemy
+Character <|-- Player
+
+Storage ..> EquipmentList
+EquipmentList --> "{abstract} \n Equipment": List of >
+"{abstract} \n Event" <|-- Battle
+"{abstract} \n Event" <|-- Loot
+"{abstract} \n Event" <|-- Shop
+
+Storage ..> Game
+@enduml
