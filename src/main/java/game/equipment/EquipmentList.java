@@ -5,6 +5,7 @@ import functionalities.ui.UI;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static storage.Storage.SAVE_DELIMITER;
 
@@ -47,8 +48,9 @@ public class EquipmentList {
         if (currSlot.isPresent()) {
             throw new RolladieException(currSlot.get().getEquipmentType() + " is already equipped!");
         }
-        return equipmentSlot.stream()
-                .map(e -> equipmentSlot.indexOf(e) == equipmentType ? Optional.of(equipment) : e)
+        int count = 0;
+        return IntStream.range(0,3)
+                .mapToObj(x -> x == equipmentType ? Optional.of(equipment) : equipmentSlot.get(x))
                 .toList();
     }
 
@@ -75,9 +77,7 @@ public class EquipmentList {
         default:
             throw new RolladieException("Invalid Equipment type!");
         }
-
         Optional<Equipment> currSlot = equipmentSlot.get(currIndex);
-
         return currSlot.orElseThrow(() -> new RolladieException(equipmentType + " is not equipped!"));
     }
 

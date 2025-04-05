@@ -61,6 +61,12 @@ public class Player extends Character {
         this.equipments = equipments;
     }
 
+    public Player(int healthBars, int attackValue, int defenseValue, String characterName, int maxHealth, int amount, EquipmentList equipments) {
+        super(healthBars, attackValue, defenseValue, characterName);
+        this.gold = new Gold(amount);
+        this.equipments = equipments;
+    }
+
     /**
      * Gold amount earned by player
      * @param earnedGold An integer to represent the amount earned.
@@ -92,8 +98,8 @@ public class Player extends Character {
     }
 
     public void sellEquipment(String equipmentType) throws RolladieException {
-        this.equipments = this.equipments.removeEquipment(equipmentType);
         earnGold(new Gold(equipments.getEquipment(equipmentType).getValue() / 2));
+        this.equipments = this.equipments.removeEquipment(equipmentType);
     }
 
     public Equipment getEquipment(String equipmentType) throws RolladieException {
